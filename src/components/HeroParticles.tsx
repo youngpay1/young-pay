@@ -124,47 +124,37 @@ const HeroParticles = () => {
       if (Math.random() < 0.03) flickerTarget = 1.4; // occasional bright spike
       flickerNoise += (flickerTarget - flickerNoise) * 0.35; // faster response
 
-      // DJ booth light — horizontal strip at bottom center
-      const lightY = canvas.height * 0.88;
-      const lightW = canvas.width * 0.6;
+      // DJ booth light — positioned over the actual light in the photo
+      const lightY = canvas.height * 0.76;
       const lightX = canvas.width * 0.5;
+      const lightW = canvas.width * 0.45;
 
-      // Bright horizontal strip — core white bar
-      const stripGrad = ctx.createLinearGradient(lightX - lightW * 0.5, lightY, lightX + lightW * 0.5, lightY);
-      stripGrad.addColorStop(0,    'rgba(0,0,0,0)');
-      stripGrad.addColorStop(0.15, `rgba(180, 255, 160, ${flickerNoise * 0.5})`);
-      stripGrad.addColorStop(0.5,  `rgba(240, 255, 220, ${flickerNoise * 0.85})`);
-      stripGrad.addColorStop(0.85, `rgba(180, 255, 160, ${flickerNoise * 0.5})`);
-      stripGrad.addColorStop(1,    'rgba(0,0,0,0)');
-      ctx.fillStyle = stripGrad;
-      ctx.fillRect(lightX - lightW * 0.5, lightY - 4, lightW, 8);
-
-      // Wide horizontal glow beneath
-      const horizGlow = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, lightW * 0.65);
-      horizGlow.addColorStop(0,    `rgba(220, 255, 180, ${flickerNoise * 0.75})`);
-      horizGlow.addColorStop(0.2,  `rgba(120, 255, 80,  ${flickerNoise * 0.5})`);
-      horizGlow.addColorStop(0.5,  `rgba(60,  200, 40,  ${flickerNoise * 0.25})`);
-      horizGlow.addColorStop(0.8,  `rgba(20,  140, 20,  ${flickerNoise * 0.1})`);
-      horizGlow.addColorStop(1,    'rgba(0,0,0,0)');
+      // Core glow — wide flat ellipse sitting right on the light source
       ctx.save();
-      ctx.scale(1, 0.25);
-      ctx.fillStyle = horizGlow;
+      ctx.scale(1, 0.18);
+      const coreGrad = ctx.createRadialGradient(lightX, lightY / 0.18, 0, lightX, lightY / 0.18, lightW);
+      coreGrad.addColorStop(0,   `rgba(255, 255, 220, ${flickerNoise * 0.9})`);
+      coreGrad.addColorStop(0.2, `rgba(200, 255, 140, ${flickerNoise * 0.7})`);
+      coreGrad.addColorStop(0.5, `rgba(80,  220, 60,  ${flickerNoise * 0.4})`);
+      coreGrad.addColorStop(0.8, `rgba(30,  160, 30,  ${flickerNoise * 0.15})`);
+      coreGrad.addColorStop(1,   'rgba(0,0,0,0)');
+      ctx.fillStyle = coreGrad;
       ctx.beginPath();
-      ctx.arc(lightX, lightY / 0.25, lightW * 0.65, 0, Math.PI * 2);
+      ctx.arc(lightX, lightY / 0.18, lightW, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
 
-      // Upward light shaft
-      const shaftGrad = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, canvas.height * 0.6);
-      shaftGrad.addColorStop(0,   `rgba(180, 255, 140, ${flickerNoise * 0.35})`);
-      shaftGrad.addColorStop(0.25,`rgba(80,  220, 60,  ${flickerNoise * 0.15})`);
-      shaftGrad.addColorStop(0.6, `rgba(30,  160, 30,  ${flickerNoise * 0.06})`);
-      shaftGrad.addColorStop(1,   'rgba(0,0,0,0)');
+      // Upward spill — soft cone of light going up from the source
       ctx.save();
-      ctx.scale(0.3, 1);
-      ctx.fillStyle = shaftGrad;
+      ctx.scale(0.4, 1);
+      const spillGrad = ctx.createRadialGradient(lightX / 0.4, lightY, 0, lightX / 0.4, lightY, canvas.height * 0.5);
+      spillGrad.addColorStop(0,   `rgba(160, 255, 120, ${flickerNoise * 0.25})`);
+      spillGrad.addColorStop(0.3, `rgba(60,  200, 50,  ${flickerNoise * 0.1})`);
+      spillGrad.addColorStop(0.7, `rgba(20,  140, 20,  ${flickerNoise * 0.04})`);
+      spillGrad.addColorStop(1,   'rgba(0,0,0,0)');
+      ctx.fillStyle = spillGrad;
       ctx.beginPath();
-      ctx.arc(lightX / 0.3, lightY, canvas.height * 0.6, 0, Math.PI * 2);
+      ctx.arc(lightX / 0.4, lightY, canvas.height * 0.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
