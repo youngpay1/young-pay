@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { collaborations } from '@/data/collaborations';
 import HeroParticles from '@/components/HeroParticles';
@@ -6,6 +6,11 @@ import HeroParticles from '@/components/HeroParticles';
 const previewItems = collaborations.filter((c) => c.images?.[0]).slice(0, 6);
 
 const Index = () => {
+  const navigate = useNavigate();
+  const goToPortfolio = () => {
+    if (window.innerWidth >= 768) navigate('/portfolio');
+  };
+
   return (
     <div className="min-h-screen bg-background">
 
@@ -61,7 +66,8 @@ const Index = () => {
             {previewItems.map((collab) => (
               <div
                 key={collab.id}
-                className="group relative aspect-square overflow-hidden bg-black"
+                className="group relative aspect-square overflow-hidden bg-black md:cursor-pointer"
+                onClick={goToPortfolio}
               >
                 <img
                   src={collab.images![0]}
