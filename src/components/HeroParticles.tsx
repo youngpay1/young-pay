@@ -118,42 +118,53 @@ const HeroParticles = () => {
       const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 3);
       scrollRef.current.vy *= 0.85;
 
-      // Flicker — slow sine base + random spikes
-      flickerTarget = 0.75 + Math.sin(frame * 0.04) * 0.15 + Math.sin(frame * 0.13) * 0.08;
-      if (Math.random() < 0.04) flickerTarget *= 0.3 + Math.random() * 0.4; // occasional drop
-      flickerNoise += (flickerTarget - flickerNoise) * 0.18;
+      // Flicker — faster sine + aggressive random drops
+      flickerTarget = 0.8 + Math.sin(frame * 0.12) * 0.2 + Math.sin(frame * 0.31) * 0.12;
+      if (Math.random() < 0.06) flickerTarget *= 0.1 + Math.random() * 0.35; // hard drops
+      if (Math.random() < 0.03) flickerTarget = 1.4; // occasional bright spike
+      flickerNoise += (flickerTarget - flickerNoise) * 0.35; // faster response
 
       // DJ booth light — horizontal strip at bottom center
       const lightY = canvas.height * 0.88;
-      const lightW = canvas.width * 0.55;
+      const lightW = canvas.width * 0.6;
       const lightX = canvas.width * 0.5;
 
-      // Wide horizontal glow
-      const horizGlow = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, lightW * 0.6);
-      horizGlow.addColorStop(0,    `rgba(220, 255, 200, ${flickerNoise * 0.55})`);
-      horizGlow.addColorStop(0.15, `rgba(120, 255, 80,  ${flickerNoise * 0.35})`);
-      horizGlow.addColorStop(0.4,  `rgba(60,  200, 40,  ${flickerNoise * 0.15})`);
-      horizGlow.addColorStop(0.7,  `rgba(20,  140, 20,  ${flickerNoise * 0.06})`);
+      // Bright horizontal strip — core white bar
+      const stripGrad = ctx.createLinearGradient(lightX - lightW * 0.5, lightY, lightX + lightW * 0.5, lightY);
+      stripGrad.addColorStop(0,    'rgba(0,0,0,0)');
+      stripGrad.addColorStop(0.15, `rgba(180, 255, 160, ${flickerNoise * 0.5})`);
+      stripGrad.addColorStop(0.5,  `rgba(240, 255, 220, ${flickerNoise * 0.85})`);
+      stripGrad.addColorStop(0.85, `rgba(180, 255, 160, ${flickerNoise * 0.5})`);
+      stripGrad.addColorStop(1,    'rgba(0,0,0,0)');
+      ctx.fillStyle = stripGrad;
+      ctx.fillRect(lightX - lightW * 0.5, lightY - 4, lightW, 8);
+
+      // Wide horizontal glow beneath
+      const horizGlow = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, lightW * 0.65);
+      horizGlow.addColorStop(0,    `rgba(220, 255, 180, ${flickerNoise * 0.75})`);
+      horizGlow.addColorStop(0.2,  `rgba(120, 255, 80,  ${flickerNoise * 0.5})`);
+      horizGlow.addColorStop(0.5,  `rgba(60,  200, 40,  ${flickerNoise * 0.25})`);
+      horizGlow.addColorStop(0.8,  `rgba(20,  140, 20,  ${flickerNoise * 0.1})`);
       horizGlow.addColorStop(1,    'rgba(0,0,0,0)');
       ctx.save();
-      ctx.scale(1, 0.3); // flatten into wide horizontal band
+      ctx.scale(1, 0.25);
       ctx.fillStyle = horizGlow;
       ctx.beginPath();
-      ctx.arc(lightX, lightY / 0.3, lightW * 0.6, 0, Math.PI * 2);
+      ctx.arc(lightX, lightY / 0.25, lightW * 0.65, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
 
       // Upward light shaft
-      const shaftGrad = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, canvas.height * 0.55);
-      shaftGrad.addColorStop(0,   `rgba(180, 255, 140, ${flickerNoise * 0.2})`);
-      shaftGrad.addColorStop(0.3, `rgba(60,  200, 60,  ${flickerNoise * 0.08})`);
-      shaftGrad.addColorStop(0.7, `rgba(20,  140, 20,  ${flickerNoise * 0.03})`);
+      const shaftGrad = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, canvas.height * 0.6);
+      shaftGrad.addColorStop(0,   `rgba(180, 255, 140, ${flickerNoise * 0.35})`);
+      shaftGrad.addColorStop(0.25,`rgba(80,  220, 60,  ${flickerNoise * 0.15})`);
+      shaftGrad.addColorStop(0.6, `rgba(30,  160, 30,  ${flickerNoise * 0.06})`);
       shaftGrad.addColorStop(1,   'rgba(0,0,0,0)');
       ctx.save();
-      ctx.scale(0.35, 1); // narrow vertical shaft
+      ctx.scale(0.3, 1);
       ctx.fillStyle = shaftGrad;
       ctx.beginPath();
-      ctx.arc(lightX / 0.35, lightY, canvas.height * 0.55, 0, Math.PI * 2);
+      ctx.arc(lightX / 0.3, lightY, canvas.height * 0.6, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
