@@ -152,7 +152,7 @@ const HeroParticles = () => {
 
         if (mouse.active) {
           const isMob = canvas.width < 768;
-          const radius = isMob ? 160 : 120;
+          const radius = isMob ? 80 : 60;
           const force = isMob ? 2.8 : 1.8;
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
