@@ -51,24 +51,22 @@ const HeroParticles = () => {
     const onMouseLeave = () => { mouseRef.current.active = false; mouseRef.current.clicking = false; };
     const onMouseDown = () => { if (canvas.width >= 768) mouseRef.current.clicking = true; };
     const onMouseUp = () => { mouseRef.current.clicking = false; };
+    const onTouchEnd = () => { mouseRef.current.active = false; mouseRef.current.clicking = false; };
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('mouseleave', onMouseLeave);
     canvas.addEventListener('mousedown', onMouseDown);
     canvas.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('touchend', onTouchEnd);
 
     let lastScrollY = window.scrollY;
     const onScroll = () => {
       const delta = window.scrollY - lastScrollY;
+      scrollRef.current.vy = delta; // scroll down (delta > 0) speeds particles upward
       if (delta > 0) {
-        // Scroll down: kill swirl (vx) only, leave upward vy untouched
-        for (const p of particles) {
-          p.vx *= 0.1;
-        }
+        // Kill swirl and click state when scrolling down
+        for (const p of particles) { p.vx *= 0.1; }
         mouseRef.current.clicking = false;
-        scrollRef.current.vy = 0;
-      } else {
-        // Scroll up: boost particles upward
-        scrollRef.current.vy = delta;
+        mouseRef.current.active = false;
       }
       lastScrollY = window.scrollY;
     };
@@ -246,6 +244,7 @@ const HeroParticles = () => {
       canvas.removeEventListener('mouseleave', onMouseLeave);
       canvas.removeEventListener('mousedown', onMouseDown);
       canvas.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('touchend', onTouchEnd);
     };
   }, []);
 
