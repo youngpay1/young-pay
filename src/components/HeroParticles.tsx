@@ -60,14 +60,14 @@ const HeroParticles = () => {
     const onScroll = () => {
       const delta = window.scrollY - lastScrollY;
       if (delta > 0) {
-        // Reset all particle velocities on scroll down
+        // Scroll down: kill swirl (vx) only, leave upward vy untouched
         for (const p of particles) {
-          p.vx = 0;
-          p.vy = p.baseVy;
+          p.vx *= 0.1;
         }
-        scrollRef.current.vy = 0;
         mouseRef.current.clicking = false;
+        scrollRef.current.vy = 0;
       } else {
+        // Scroll up: boost particles upward
         scrollRef.current.vy = delta;
       }
       lastScrollY = window.scrollY;
