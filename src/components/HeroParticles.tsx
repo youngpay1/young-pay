@@ -91,8 +91,8 @@ const HeroParticles = () => {
       smoke.push({
         x: cx + (Math.random() - 0.5) * canvas.width * 0.45,
         y: canvas.height * (isMobile ? 0.7 : 0.55) + Math.random() * canvas.height * 0.2,
-        vx: (Math.random() - 0.5) * 0.9,
-        vy: isMobile ? -(0.15 + Math.random() * 0.3) : -(0.3 + Math.random() * 0.5),
+        vx: (Math.random() - 0.5) * 1.8,
+        vy: isMobile ? -(0.35 + Math.random() * 0.55) : -(0.7 + Math.random() * 0.9),
         radius: isMobile ? 30 + Math.random() * 50 : 70 + Math.random() * 130,
         opacity: 0,
         life: 0,
@@ -100,7 +100,7 @@ const HeroParticles = () => {
       });
     };
 
-    for (let i = 0; i < 14; i++) spawnSmoke();
+    for (let i = 0; i < 7; i++) spawnSmoke();
 
     let frame = 0;
     let animId: number;
@@ -117,7 +117,7 @@ const HeroParticles = () => {
       scrollRef.current.vy *= 0.85;
 
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
-      if (frame % 18 === 0) spawnSmoke();
+      if (frame % 30 === 0) spawnSmoke();
 
       // Soft green smoke blobs
       for (let i = smoke.length - 1; i >= 0; i--) {
@@ -125,9 +125,9 @@ const HeroParticles = () => {
         s.life++;
         s.x += s.vx;
         s.y += s.vy;
-        s.vx += (Math.random() - 0.5) * 0.06;
-        s.vy += (Math.random() - 0.5) * 0.02;
-        s.vx *= 0.98;
+        s.vx += (Math.random() - 0.5) * 0.18;
+        s.vy += (Math.random() - 0.5) * 0.07;
+        s.vx *= 0.96;
 
         const p = s.life / s.maxLife;
         s.opacity = p < 0.12 ? p / 0.12 : p > 0.65 ? 1 - (p - 0.65) / 0.35 : 1;
