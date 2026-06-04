@@ -10,7 +10,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
 
       {/* Hero */}
-      <section className="relative h-[75vh] overflow-hidden">
+      <section className="relative h-[70vh] md:h-screen overflow-hidden">
         <img
           src="/hero.png"
           alt="Young Pay"
@@ -57,7 +57,7 @@ const Index = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
             {previewItems.map((collab) => (
               <div
                 key={collab.id}

@@ -10,7 +10,7 @@ const Collaborations = () => {
         </p>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
           {collaborations.map((collab) => {
             const img = collab.images?.[0];
             return (

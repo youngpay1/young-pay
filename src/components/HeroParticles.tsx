@@ -55,20 +55,23 @@ const HeroParticles = () => {
     const smoke: SmokeBlob[] = [];
 
     const spawnParticle = (mx?: number) => {
+      const isMobile = canvas.width < 768;
       const cx = mx !== undefined
         ? canvas.width * 0.5 + (mx - canvas.width * 0.5) * 0.35
         : canvas.width * 0.5;
-      const baseVy = -(0.7 + Math.random() * 1.2);
+      const baseVy = isMobile
+        ? -(0.4 + Math.random() * 0.7)
+        : -(0.7 + Math.random() * 1.2);
       particles.push({
         x: cx + (Math.random() - 0.5) * canvas.width * 0.35,
         y: canvas.height * 0.88 + (Math.random() - 0.5) * 50,
         vx: (Math.random() - 0.5) * 0.4,
         vy: baseVy,
         baseVy,
-        size: 0.8 + Math.random() * 1.6,
+        size: isMobile ? 0.4 + Math.random() * 0.8 : 0.8 + Math.random() * 1.6,
         opacity: 0,
         life: 0,
-        maxLife: 200 + Math.random() * 200,
+        maxLife: isMobile ? 150 + Math.random() * 100 : 200 + Math.random() * 200,
         glowing: Math.random() < 0.3,
       });
     };
