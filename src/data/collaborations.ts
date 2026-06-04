@@ -179,12 +179,6 @@ export const collaborations: Collaboration[] = [
     images: ['/collaborations/soho-house.jpg'],
   },
   {
-    id: 'rolling-loud',
-    name: 'Rolling Loud',
-    type: 'brand',
-    images: ['/collaborations/rolling-loud.png'],
-  },
-  {
     id: 'barrys',
     name: "Barry's",
     type: 'brand',
