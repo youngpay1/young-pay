@@ -125,7 +125,7 @@ const HeroParticles = () => {
       flickerNoise += (flickerTarget - flickerNoise) * 0.35; // faster response
 
       // DJ booth light — positioned over the actual light in the photo
-      const lightY = canvas.height * 0.85;
+      const lightY = canvas.height * 0.89;
       const lightX = canvas.width * 0.5;
       const lightW = canvas.width * 0.45;
 
