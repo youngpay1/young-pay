@@ -59,7 +59,17 @@ const HeroParticles = () => {
     let lastScrollY = window.scrollY;
     const onScroll = () => {
       const delta = window.scrollY - lastScrollY;
-      scrollRef.current.vy = delta > 0 ? 0 : delta; // only react on scroll up
+      if (delta > 0) {
+        // Reset all particle velocities on scroll down
+        for (const p of particles) {
+          p.vx = 0;
+          p.vy = p.baseVy;
+        }
+        scrollRef.current.vy = 0;
+        mouseRef.current.clicking = false;
+      } else {
+        scrollRef.current.vy = delta;
+      }
       lastScrollY = window.scrollY;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
