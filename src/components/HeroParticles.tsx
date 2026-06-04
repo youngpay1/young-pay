@@ -97,7 +97,7 @@ const HeroParticles = () => {
         y: canvas.height * (isMobile ? 0.7 : 0.55) + Math.random() * canvas.height * 0.2,
         vx: (Math.random() - 0.5) * 1.8,
         vy: isMobile ? -(0.35 + Math.random() * 0.55) : -(0.7 + Math.random() * 0.9),
-        radius: isMobile ? 30 + Math.random() * 50 : 70 + Math.random() * 130,
+        radius: isMobile ? 30 + Math.random() * 50 : 35 + Math.random() * 55,
         opacity: 0,
         life: 0,
         maxLife: isMobile ? 120 + Math.random() * 80 : 180 + Math.random() * 120,
