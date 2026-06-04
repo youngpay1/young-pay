@@ -133,9 +133,9 @@ const HeroParticles = () => {
         s.opacity = p < 0.12 ? p / 0.12 : p > 0.65 ? 1 - (p - 0.65) / 0.35 : 1;
 
         const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius);
-        g.addColorStop(0,    `rgba(80, 200, 120, ${s.opacity * 0.22})`);
-        g.addColorStop(0.4,  `rgba(60, 170, 100, ${s.opacity * 0.13})`);
-        g.addColorStop(0.75, `rgba(30, 120,  70, ${s.opacity * 0.06})`);
+        g.addColorStop(0,    `rgba(100, 220, 130, ${s.opacity * 0.09})`);
+        g.addColorStop(0.4,  `rgba(70,  185, 105, ${s.opacity * 0.05})`);
+        g.addColorStop(0.75, `rgba(35,  130,  75, ${s.opacity * 0.02})`);
         g.addColorStop(1,    'rgba(0,0,0,0)');
         ctx.fillStyle = g;
         ctx.beginPath();
