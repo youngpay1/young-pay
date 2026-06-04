@@ -14,7 +14,7 @@ const MenuIcon = ({ size = 20 }: { size?: number }) => (
 
 const navLinks = [
   { path: '/', label: 'HOME' },
-  { path: '/collaborations', label: 'PORTFOLIO' },
+  { path: '/portfolio', label: 'PORTFOLIO' },
   { path: '/contact', label: 'CONTACT' },
 ];
 
@@ -59,12 +59,12 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Mobile: Logo (center) */}
-        <Link to="/" className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center">
+        {/* Mobile: Logo (right) */}
+        <Link to="/" className="md:hidden flex items-center">
           <img
             src="/young-pay-logo.png"
             alt="Young Pay"
-            className="h-12 w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
+            className="h-8 w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
             onError={(e) => {
               const target = e.currentTarget;
               target.style.display = 'none';

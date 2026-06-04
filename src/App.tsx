@@ -21,7 +21,7 @@ const App = () => {
             <PageTransition>
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/collaborations" element={<Collaborations />} />
+                <Route path="/portfolio" element={<Collaborations />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

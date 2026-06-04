@@ -10,7 +10,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
 
       {/* Hero */}
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative h-[75vh] overflow-hidden">
         <img
           src="/hero.png"
           alt="Young Pay"
@@ -49,7 +49,7 @@ const Index = () => {
               Portfolio
             </p>
             <Link
-              to="/collaborations"
+              to="/portfolio"
               className="nav-link text-xs uppercase tracking-widest flex items-center gap-2"
             >
               View All
@@ -57,11 +57,10 @@ const Index = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-2 gap-1">
             {previewItems.map((collab) => (
-              <Link
+              <div
                 key={collab.id}
-                to="/collaborations"
                 className="group relative aspect-square overflow-hidden bg-black"
               >
                 <img
@@ -76,7 +75,7 @@ const Index = () => {
                     {collab.name}
                   </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

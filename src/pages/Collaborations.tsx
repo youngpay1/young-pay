@@ -1,10 +1,6 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 import { collaborations } from '@/data/collaborations';
 
 const Collaborations = () => {
-  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen pt-24 md:pt-28 pb-12">
@@ -14,14 +10,13 @@ const Collaborations = () => {
         </p>
 
         {/* Grid */}
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid grid-cols-2 gap-1">
           {collaborations.map((collab) => {
             const img = collab.images?.[0];
             return (
               <div
                 key={collab.id}
-                className="group relative aspect-square overflow-hidden bg-black cursor-pointer"
-                onClick={() => img && setFullscreenImage(img)}
+                className="group relative aspect-square overflow-hidden bg-black"
               >
                 {img && (
                   <img
@@ -43,36 +38,6 @@ const Collaborations = () => {
         </div>
       </div>
 
-      {/* Fullscreen modal */}
-      <AnimatePresence>
-        {fullscreenImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-background/95 flex items-center justify-center p-4"
-            onClick={() => setFullscreenImage(null)}
-          >
-            <span
-              className="absolute top-4 right-4 nav-link cursor-pointer z-50"
-              onClick={() => setFullscreenImage(null)}
-            >
-              <X className="w-6 h-6" />
-            </span>
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              src={fullscreenImage}
-              alt="Fullscreen"
-              className="max-w-full max-h-full object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
