@@ -128,6 +128,24 @@ export const collaborations: Collaboration[] = [
     images: ['/collaborations/pepel-nahudi.jpg'],
   },
   {
+    id: 'dj-rennessy',
+    name: 'DJ Rennessy',
+    type: 'artist',
+    images: ['/collaborations/dj-rennessy.jpg'],
+  },
+  {
+    id: 'sn8ke',
+    name: 'Sn8ke',
+    type: 'artist',
+    images: ['/collaborations/sn8ke.jpg'],
+  },
+  {
+    id: 'beezy-b',
+    name: 'Beezy B',
+    type: 'artist',
+    images: ['/collaborations/beezy-b.jpg'],
+  },
+  {
     id: 'paris',
     name: 'Paris Shadows',
     type: 'venue',
