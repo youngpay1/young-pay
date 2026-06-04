@@ -72,7 +72,7 @@ const HeroParticles = () => {
         ? -(0.4 + Math.random() * 0.7)
         : -(0.7 + Math.random() * 1.2);
       particles.push({
-        x: cx + (Math.random() - 0.5) * canvas.width * 0.85,
+        x: cx + (Math.random() - 0.5) * canvas.width * (isMobile ? 0.85 : 0.35),
         y: canvas.height * 0.88 + (Math.random() - 0.5) * 50,
         vx: (Math.random() - 0.5) * 0.4,
         vy: baseVy,
@@ -115,7 +115,7 @@ const HeroParticles = () => {
       frame++;
 
       const isMobile = canvas.width < 768;
-      const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 2);
+      const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 3);
       scrollRef.current.vy *= 0.85;
 
       // Flicker — slow sine base + random spikes
