@@ -26,8 +26,8 @@ interface SmokeBlob {
 
 const HeroParticles = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef<{ x: number; y: number; active: boolean }>({
-    x: 0, y: 0, active: false,
+  const mouseRef = useRef<{ x: number; y: number; active: boolean; clicking: boolean }>({
+    x: 0, y: 0, active: false, clicking: false,
   });
   const scrollRef = useRef<{ vy: number }>({ vy: 0 });
 
@@ -48,9 +48,13 @@ const HeroParticles = () => {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
     };
-    const onMouseLeave = () => { mouseRef.current.active = false; };
+    const onMouseLeave = () => { mouseRef.current.active = false; mouseRef.current.clicking = false; };
+    const onMouseDown = () => { if (canvas.width >= 768) mouseRef.current.clicking = true; };
+    const onMouseUp = () => { mouseRef.current.clicking = false; };
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('mouseleave', onMouseLeave);
+    canvas.addEventListener('mousedown', onMouseDown);
+    canvas.addEventListener('mouseup', onMouseUp);
 
     let lastScrollY = window.scrollY;
     const onScroll = () => {
@@ -156,26 +160,27 @@ const HeroParticles = () => {
         p.life++;
 
         if (mouse.active) {
+          const clicking = mouse.clicking;
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          // Attract from far, repel when close — creates swirl
-          const attractRadius = 200;
-          const repelRadius = 55;
+          const attractRadius = clicking ? 350 : 200;
+          const repelRadius = clicking ? 80 : 55;
+          const attractStrength = clicking ? 3.5 : 1.2;
+          const repelStrength = clicking ? 9.0 : 4.0;
+          const swirlStrength = clicking ? 0.12 : 0.04;
+
           if (dist < attractRadius && dist > 0) {
             if (dist < repelRadius) {
-              // Hard repel
-              const f = (1 - dist / repelRadius) * 4.0;
+              const f = (1 - dist / repelRadius) * repelStrength;
               p.vx += (dx / dist) * f * 0.18;
               p.vy += (dy / dist) * f * 0.18;
             } else {
-              // Soft attract + sideways swirl
-              const f = (1 - dist / attractRadius) * 1.2;
+              const f = (1 - dist / attractRadius) * attractStrength;
               p.vx -= (dx / dist) * f * 0.06;
               p.vy -= (dy / dist) * f * 0.06;
-              // Perpendicular nudge for swirl
-              p.vx += (-dy / dist) * f * 0.04;
-              p.vy += (dx / dist) * f * 0.04;
+              p.vx += (-dy / dist) * f * swirlStrength;
+              p.vy += (dx / dist) * f * swirlStrength;
             }
           }
           p.vy += (p.baseVy - p.vy) * 0.012;
@@ -229,6 +234,8 @@ const HeroParticles = () => {
       window.removeEventListener('scroll', onScroll);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseleave', onMouseLeave);
+      canvas.removeEventListener('mousedown', onMouseDown);
+      canvas.removeEventListener('mouseup', onMouseUp);
     };
   }, []);
 
