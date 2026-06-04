@@ -26,7 +26,7 @@ const Index = () => {
       <section className="pt-8 pb-12 md:py-[60px]">
         <div className="container max-w-4xl">
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
-            Some people make music.<br className="block md:hidden" /> Young Pay connects the dots.
+            Artists make music.<br className="block md:hidden" /> Young Pay connects the dots.
           </p>
           <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-6">
             Operating between Europe and America, he has spent over seven years building the

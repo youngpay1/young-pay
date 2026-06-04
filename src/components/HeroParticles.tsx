@@ -66,13 +66,13 @@ const HeroParticles = () => {
     const spawnParticle = (mx?: number) => {
       const isMobile = canvas.width < 768;
       const cx = mx !== undefined
-        ? canvas.width * 0.5 + (mx - canvas.width * 0.5) * 0.35
+        ? canvas.width * 0.5 + (mx - canvas.width * 0.5) * 0.5
         : canvas.width * 0.5;
       const baseVy = isMobile
         ? -(0.4 + Math.random() * 0.7)
         : -(0.7 + Math.random() * 1.2);
       particles.push({
-        x: cx + (Math.random() - 0.5) * canvas.width * 0.35,
+        x: cx + (Math.random() - 0.5) * canvas.width * 0.85,
         y: canvas.height * 0.88 + (Math.random() - 0.5) * 50,
         vx: (Math.random() - 0.5) * 0.4,
         vy: baseVy,
@@ -113,7 +113,7 @@ const HeroParticles = () => {
       frame++;
 
       const isMobile = canvas.width < 768;
-      const spawnRate = mouse.active ? 1 : (isMobile ? 2 : 3);
+      const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 2);
       scrollRef.current.vy *= 0.85;
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
       if (frame % 35 === 0) spawnSmoke();
