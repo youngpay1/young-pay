@@ -91,12 +91,12 @@ const HeroParticles = () => {
       smoke.push({
         x: cx + (Math.random() - 0.5) * canvas.width * 0.45,
         y: canvas.height * (isMobile ? 0.7 : 0.55) + Math.random() * canvas.height * 0.2,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: isMobile ? -(0.04 + Math.random() * 0.08) : -(0.08 + Math.random() * 0.18),
+        vx: (Math.random() - 0.5) * 0.9,
+        vy: isMobile ? -(0.15 + Math.random() * 0.3) : -(0.3 + Math.random() * 0.5),
         radius: isMobile ? 30 + Math.random() * 50 : 70 + Math.random() * 130,
         opacity: 0,
         life: 0,
-        maxLife: isMobile ? 250 + Math.random() * 150 : 500 + Math.random() * 400,
+        maxLife: isMobile ? 120 + Math.random() * 80 : 180 + Math.random() * 120,
       });
     };
 
@@ -117,7 +117,7 @@ const HeroParticles = () => {
       scrollRef.current.vy *= 0.85;
 
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
-      if (frame % 35 === 0) spawnSmoke();
+      if (frame % 18 === 0) spawnSmoke();
 
       // Soft green smoke blobs
       for (let i = smoke.length - 1; i >= 0; i--) {
@@ -125,15 +125,17 @@ const HeroParticles = () => {
         s.life++;
         s.x += s.vx;
         s.y += s.vy;
-        s.vx += (Math.random() - 0.5) * 0.012;
+        s.vx += (Math.random() - 0.5) * 0.06;
+        s.vy += (Math.random() - 0.5) * 0.02;
+        s.vx *= 0.98;
 
         const p = s.life / s.maxLife;
-        s.opacity = p < 0.12 ? p / 0.12 : p > 0.72 ? 1 - (p - 0.72) / 0.28 : 1;
+        s.opacity = p < 0.12 ? p / 0.12 : p > 0.65 ? 1 - (p - 0.65) / 0.35 : 1;
 
         const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius);
-        g.addColorStop(0,    `rgba(80, 200, 120, ${s.opacity * 0.09})`);
-        g.addColorStop(0.4,  `rgba(60, 170, 100, ${s.opacity * 0.05})`);
-        g.addColorStop(0.75, `rgba(30, 120,  70, ${s.opacity * 0.02})`);
+        g.addColorStop(0,    `rgba(80, 200, 120, ${s.opacity * 0.22})`);
+        g.addColorStop(0.4,  `rgba(60, 170, 100, ${s.opacity * 0.13})`);
+        g.addColorStop(0.75, `rgba(30, 120,  70, ${s.opacity * 0.06})`);
         g.addColorStop(1,    'rgba(0,0,0,0)');
         ctx.fillStyle = g;
         ctx.beginPath();
