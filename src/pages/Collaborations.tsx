@@ -26,12 +26,16 @@ const Collaborations = () => {
                   />
                 )}
                 <div className="absolute inset-0 bg-background/40 transition-all duration-500 group-hover:bg-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="absolute inset-0 flex flex-col items-center justify-end gap-1 px-2 pb-3 z-10">
-                  <span className="nav-link-group text-xs md:text-sm uppercase tracking-widest text-center">
-                    {collab.name}
-                  </span>
-                </div>
+                {collab.type === 'artist' && (
+                  <>
+                    <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/80 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-end gap-1 px-2 pb-3 z-10">
+                      <span className="nav-link-group text-xs md:text-sm uppercase tracking-widest text-center">
+                        {collab.name}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}
