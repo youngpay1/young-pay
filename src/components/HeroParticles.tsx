@@ -113,8 +113,13 @@ const HeroParticles = () => {
       frame++;
 
       const isMobile = canvas.width < 768;
-      const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 3);
+      const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 2);
       scrollRef.current.vy *= 0.85;
+
+      // Burst particles from cursor when hovering
+      if (mouse.active && frame % 3 === 0) {
+        spawnParticle(mouse.x);
+      }
 
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
       if (frame % 30 === 0) spawnSmoke();
@@ -133,9 +138,9 @@ const HeroParticles = () => {
         s.opacity = p < 0.12 ? p / 0.12 : p > 0.65 ? 1 - (p - 0.65) / 0.35 : 1;
 
         const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius);
-        g.addColorStop(0,    `rgba(100, 220, 130, ${s.opacity * 0.09})`);
-        g.addColorStop(0.4,  `rgba(70,  185, 105, ${s.opacity * 0.05})`);
-        g.addColorStop(0.75, `rgba(35,  130,  75, ${s.opacity * 0.02})`);
+        g.addColorStop(0,    `rgba(100, 220, 130, ${s.opacity * 0.18})`);
+        g.addColorStop(0.4,  `rgba(70,  185, 105, ${s.opacity * 0.11})`);
+        g.addColorStop(0.75, `rgba(35,  130,  75, ${s.opacity * 0.05})`);
         g.addColorStop(1,    'rgba(0,0,0,0)');
         ctx.fillStyle = g;
         ctx.beginPath();
@@ -151,18 +156,29 @@ const HeroParticles = () => {
         p.life++;
 
         if (mouse.active) {
-          const isMob = canvas.width < 768;
-          const radius = isMob ? 80 : 60;
-          const force = isMob ? 2.8 : 1.8;
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < radius && dist > 0) {
-            const f = (1 - dist / radius) * force;
-            p.vx += (dx / dist) * f * 0.13;
-            p.vy += (dy / dist) * f * 0.13;
+          // Attract from far, repel when close — creates swirl
+          const attractRadius = 200;
+          const repelRadius = 55;
+          if (dist < attractRadius && dist > 0) {
+            if (dist < repelRadius) {
+              // Hard repel
+              const f = (1 - dist / repelRadius) * 4.0;
+              p.vx += (dx / dist) * f * 0.18;
+              p.vy += (dy / dist) * f * 0.18;
+            } else {
+              // Soft attract + sideways swirl
+              const f = (1 - dist / attractRadius) * 1.2;
+              p.vx -= (dx / dist) * f * 0.06;
+              p.vy -= (dy / dist) * f * 0.06;
+              // Perpendicular nudge for swirl
+              p.vx += (-dy / dist) * f * 0.04;
+              p.vy += (dx / dist) * f * 0.04;
+            }
           }
-          p.vy += (p.baseVy - p.vy) * 0.018;
+          p.vy += (p.baseVy - p.vy) * 0.012;
           p.vx *= 0.97;
         }
 
