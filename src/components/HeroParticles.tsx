@@ -104,6 +104,8 @@ const HeroParticles = () => {
 
     let frame = 0;
     let animId: number;
+    let flickerNoise = 1;
+    let flickerTarget = 1;
 
     const draw = () => {
       animId = requestAnimationFrame(draw);
@@ -115,6 +117,45 @@ const HeroParticles = () => {
       const isMobile = canvas.width < 768;
       const spawnRate = mouse.active ? 1 : (isMobile ? 1 : 2);
       scrollRef.current.vy *= 0.85;
+
+      // Flicker — slow sine base + random spikes
+      flickerTarget = 0.75 + Math.sin(frame * 0.04) * 0.15 + Math.sin(frame * 0.13) * 0.08;
+      if (Math.random() < 0.04) flickerTarget *= 0.3 + Math.random() * 0.4; // occasional drop
+      flickerNoise += (flickerTarget - flickerNoise) * 0.18;
+
+      // DJ booth light — horizontal strip at bottom center
+      const lightY = canvas.height * 0.88;
+      const lightW = canvas.width * 0.55;
+      const lightX = canvas.width * 0.5;
+
+      // Wide horizontal glow
+      const horizGlow = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, lightW * 0.6);
+      horizGlow.addColorStop(0,    `rgba(220, 255, 200, ${flickerNoise * 0.55})`);
+      horizGlow.addColorStop(0.15, `rgba(120, 255, 80,  ${flickerNoise * 0.35})`);
+      horizGlow.addColorStop(0.4,  `rgba(60,  200, 40,  ${flickerNoise * 0.15})`);
+      horizGlow.addColorStop(0.7,  `rgba(20,  140, 20,  ${flickerNoise * 0.06})`);
+      horizGlow.addColorStop(1,    'rgba(0,0,0,0)');
+      ctx.save();
+      ctx.scale(1, 0.3); // flatten into wide horizontal band
+      ctx.fillStyle = horizGlow;
+      ctx.beginPath();
+      ctx.arc(lightX, lightY / 0.3, lightW * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Upward light shaft
+      const shaftGrad = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, canvas.height * 0.55);
+      shaftGrad.addColorStop(0,   `rgba(180, 255, 140, ${flickerNoise * 0.2})`);
+      shaftGrad.addColorStop(0.3, `rgba(60,  200, 60,  ${flickerNoise * 0.08})`);
+      shaftGrad.addColorStop(0.7, `rgba(20,  140, 20,  ${flickerNoise * 0.03})`);
+      shaftGrad.addColorStop(1,   'rgba(0,0,0,0)');
+      ctx.save();
+      ctx.scale(0.35, 1); // narrow vertical shaft
+      ctx.fillStyle = shaftGrad;
+      ctx.beginPath();
+      ctx.arc(lightX / 0.35, lightY, canvas.height * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
       if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
       if (frame % 35 === 0) spawnSmoke();
 
