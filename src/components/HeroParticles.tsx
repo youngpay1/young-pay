@@ -29,6 +29,7 @@ const HeroParticles = () => {
   const mouseRef = useRef<{ x: number; y: number; active: boolean }>({
     x: 0, y: 0, active: false,
   });
+  const scrollRef = useRef<{ vy: number }>({ vy: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,6 +51,14 @@ const HeroParticles = () => {
     const onMouseLeave = () => { mouseRef.current.active = false; };
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('mouseleave', onMouseLeave);
+
+    let lastScrollY = window.scrollY;
+    const onScroll = () => {
+      const delta = window.scrollY - lastScrollY;
+      scrollRef.current.vy = delta;
+      lastScrollY = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     const particles: Particle[] = [];
     const smoke: SmokeBlob[] = [];
@@ -103,7 +112,10 @@ const HeroParticles = () => {
       const mouse = mouseRef.current;
       frame++;
 
-      if (frame % (mouse.active ? 2 : 3) === 0) spawnParticle(mouse.active ? mouse.x : undefined);
+      const isMobile = canvas.width < 768;
+      const spawnRate = mouse.active ? 1 : (isMobile ? 2 : 3);
+      scrollRef.current.vy *= 0.85;
+      if (frame % spawnRate === 0) spawnParticle(mouse.active ? mouse.x : undefined);
       if (frame % 35 === 0) spawnSmoke();
 
       // Soft green smoke blobs
@@ -136,17 +148,25 @@ const HeroParticles = () => {
         p.life++;
 
         if (mouse.active) {
+          const isMob = canvas.width < 768;
+          const radius = isMob ? 160 : 120;
+          const force = isMob ? 2.8 : 1.8;
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120 && dist > 0) {
-            const force = (1 - dist / 120) * 1.8;
-            p.vx += (dx / dist) * force * 0.11;
-            p.vy += (dy / dist) * force * 0.11;
+          if (dist < radius && dist > 0) {
+            const f = (1 - dist / radius) * force;
+            p.vx += (dx / dist) * f * 0.13;
+            p.vy += (dy / dist) * f * 0.13;
           }
           p.vy += (p.baseVy - p.vy) * 0.018;
           p.vx *= 0.97;
         }
+
+        // Scroll interaction — scroll down accelerates particles up, scroll up pushes them down
+        const scrollForce = scrollRef.current.vy * 0.04;
+        p.vy -= scrollForce;
+        p.vx += scrollRef.current.vy * (Math.random() - 0.5) * 0.02;
 
         p.x += p.vx;
         p.y += p.vy;
@@ -158,10 +178,11 @@ const HeroParticles = () => {
 
         ctx.save();
 
-        if (p.glowing) {
+        if (p.glowing && prog > 0.3) {
+          const glowProgress = Math.min(1, (prog - 0.3) / 0.2);
           const glowGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
-          glowGrad.addColorStop(0,   `rgba(80, 255, 120, ${p.opacity * 0.5})`);
-          glowGrad.addColorStop(0.4, `rgba(40, 200,  80, ${p.opacity * 0.2})`);
+          glowGrad.addColorStop(0,   `rgba(80, 255, 120, ${p.opacity * glowProgress * 0.5})`);
+          glowGrad.addColorStop(0.4, `rgba(40, 200,  80, ${p.opacity * glowProgress * 0.2})`);
           glowGrad.addColorStop(1,   'rgba(0,0,0,0)');
           ctx.fillStyle = glowGrad;
           ctx.beginPath();
@@ -186,6 +207,7 @@ const HeroParticles = () => {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', onScroll);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseleave', onMouseLeave);
     };
