@@ -59,7 +59,7 @@ const HeroParticles = () => {
     let lastScrollY = window.scrollY;
     const onScroll = () => {
       const delta = window.scrollY - lastScrollY;
-      scrollRef.current.vy = delta;
+      scrollRef.current.vy = delta > 0 ? 0 : delta; // only react on scroll up
       lastScrollY = window.scrollY;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
