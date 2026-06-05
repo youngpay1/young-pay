@@ -148,7 +148,7 @@ export const collaborations: Collaboration[] = [
   {
     id: 'paris',
     name: 'Paris Shadows',
-    type: 'venue',
+    type: 'artist',
     city: 'Frankfurt',
     images: ['/collaborations/paris.jpg'],
   },

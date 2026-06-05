@@ -114,6 +114,29 @@ const HeroParticles = () => {
 
     for (let i = 0; i < 7; i++) spawnSmoke();
 
+    // Pre-seed particles so canvas is populated on first frame
+    const isMobileInit = canvas.width < 768;
+    const preCount = isMobileInit ? 40 : 80;
+    for (let i = 0; i < preCount; i++) {
+      spawnParticle();
+      const p = particles[particles.length - 1];
+      // Spread them across the full lifecycle so they appear at different heights
+      const lifeFrac = Math.random();
+      p.life = Math.floor(lifeFrac * p.maxLife * 0.8);
+      const steps = p.life;
+      p.y -= p.vy * steps;
+      p.x += p.vx * steps;
+    }
+    // Pre-seed smoke too
+    for (let i = 0; i < 5; i++) {
+      spawnSmoke();
+      const s = smoke[smoke.length - 1];
+      const lifeFrac = Math.random();
+      s.life = Math.floor(lifeFrac * s.maxLife * 0.7);
+      s.y -= s.vy * s.life;
+      s.x += s.vx * s.life;
+    }
+
     let frame = 0;
     let animId: number;
 
