@@ -146,6 +146,12 @@ export const collaborations: Collaboration[] = [
     images: ['/collaborations/beezy-b.jpg'],
   },
   {
+    id: 'gola-gianni',
+    name: 'Gola Gianni',
+    type: 'artist',
+    images: ['/collaborations/gola-gianni.jpg'],
+  },
+  {
     id: 'paris',
     name: 'Paris Shadows',
     type: 'artist',
