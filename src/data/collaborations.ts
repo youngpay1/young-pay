@@ -152,6 +152,12 @@ export const collaborations: Collaboration[] = [
     images: ['/collaborations/gola-gianni.jpg'],
   },
   {
+    id: 'nizi19',
+    name: 'Nizi19',
+    type: 'artist',
+    images: ['/collaborations/nizi19.jpg'],
+  },
+  {
     id: 'paris',
     name: 'Paris Shadows',
     type: 'artist',
