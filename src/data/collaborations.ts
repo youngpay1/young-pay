@@ -153,9 +153,15 @@ export const collaborations: Collaboration[] = [
   },
   {
     id: 'nizi19',
-    name: 'Nizi19',
+    name: 'nizi19',
     type: 'artist',
     images: ['/collaborations/nizi19.jpg'],
+  },
+  {
+    id: 'finessim',
+    name: 'Finessim',
+    type: 'artist',
+    images: ['/collaborations/finessim.jpg'],
   },
   {
     id: 'paris',
