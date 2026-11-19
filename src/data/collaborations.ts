@@ -20,6 +20,12 @@ export const collaborations: Collaboration[] = [
     images: ['/collaborations/travis-scott.jpg'],
   },
   {
+    id: 'ski-mask-the-slump-god',
+    name: 'Ski Mask the Slump God',
+    type: 'artist',
+    images: ['/collaborations/ski-mask.jpg'],
+  },
+  {
     id: 'shoreline-mafia',
     name: 'Shoreline Mafia',
     type: 'artist',
